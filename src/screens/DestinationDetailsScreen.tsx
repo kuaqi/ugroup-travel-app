@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import { useCalendarEvents } from "../hooks/useCalendarEvents";
 
 interface Props {
   route: any,
@@ -9,10 +10,14 @@ interface Props {
 export default function DestinationDetailsScreen({ route }: Props) {
   const { destination } = route.params
   const [isCalendarDestination, setCalendarDestination] = useState(false)
+  const { requestCalendarPermissions, createEvent } = useCalendarEvents() 
 
-  function onCalendarPress() {
+  async function onCalendarPress() {
     setCalendarDestination(!isCalendarDestination)
-    console.log('Implement the onCalendarPress function.')
+    const hasGrantedPermission = await requestCalendarPermissions()
+    if (hasGrantedPermission) {
+      await createEvent(destination)
+    }
   }
 
   function renderBanner() {
