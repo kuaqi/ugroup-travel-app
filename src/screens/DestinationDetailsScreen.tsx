@@ -1,5 +1,6 @@
-import React from "react";
-import { Image, StyleSheet, Text, View, ScrollView, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, View, ScrollView, ImageBackground, TouchableOpacity } from "react-native";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 
 interface Props {
   route: any,
@@ -7,6 +8,12 @@ interface Props {
 
 export default function DestinationDetailsScreen({ route }: Props) {
   const { destination } = route.params
+  const [isCalendarDestination, setCalendarDestination] = useState(false)
+
+  function onCalendarPress() {
+    setCalendarDestination(!isCalendarDestination)
+    console.log('Implement the onCalendarPress function.')
+  }
 
   function renderBanner() {
     return (
@@ -19,6 +26,27 @@ export default function DestinationDetailsScreen({ route }: Props) {
             style={styles.bannerImage}
           />
         </ImageBackground>
+        {renderCalendarButton()}
+      </View>
+    );
+  }
+
+  function renderCalendarButton() {
+    const calendarColor = isCalendarDestination ? '#000000' : 'lightgray'
+
+    return (
+      <View style={styles.calendarContainer}>
+        <TouchableOpacity
+          style={[styles.calendarButton, { backgroundColor: 'white' } ]}
+          onPress={onCalendarPress}>
+          <Text>
+            <FontAwesome6
+              name="calendar"
+              size={26}
+              color={calendarColor}
+            />
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -90,6 +118,18 @@ const styles = StyleSheet.create({
   bannerImage: {
     aspectRatio: 1,
     width: '100%',
+  },
+  calendarContainer: {
+    right: 0,
+    bottom: 0,
+    paddingBottom: 20,
+    paddingRight: 20,
+    position: 'absolute',
+  },
+  calendarButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 28,
   },
   destinationNameText: {
     fontSize: 22,
