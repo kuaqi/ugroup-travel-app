@@ -1,5 +1,7 @@
 import React, { useCallback } from "react";
 import { Pressable, Image, Text, View, StyleSheet, ImageBackground } from "react-native";
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigation } from "../navigation/StackNavigator";
 import { Destination } from "../types";
 
 interface Props {
@@ -8,9 +10,13 @@ interface Props {
 }
 
 const DestinationListItem = ({ item, index }: Props) => {
+  const navigation = useNavigation<StackNavigation>()
 
   const onImagePress = useCallback((item: Destination) => {
-    console.log('Implement the onImagePress function.')
+    navigation.navigate('DestinationDetails', {
+      title: item.name,
+      destination: item,
+    })
   }, [])
 
   function renderImage(imageUrl: string) {
